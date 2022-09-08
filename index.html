@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        function injectScript(id, dataConfig, src, parent) {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.setAttribute('data-config', dataConfig);
+            script.onload = function () {
+
+            };
+            script.id = id;
+            script.src = src;
+            parent.appendChild(script);
+        }
+    </script>
+    <title>Widget test</title>
+</head>
+<body>
+    <h1>Widget test</h1>
+    <div>
+        <div class="item">
+            Type:
+            <input type="radio" id="cpa"
+                   name="type" value="cpa">
+            <label for="cpa">CPA</label>
+
+            <input type="radio" id="admon"
+                   name="type" value="admon">
+            <label for="admon">Admon</label>
+        </div>
+        <br>
+        <div class="item">
+            source: <input name="source" placeholder="source" value=""/>
+        </div>
+        <br>
+        <div class="item">
+            height: <input name="height" placeholder="height" value="100%"/>
+        </div>
+        <br>
+        <div class="item">
+            width: <input name="width" placeholder="width" value="100%"/>
+        </div>
+        <br>
+        <div class="item">
+            scrolling: <input name="scrolling" placeholder="scrolling" value="yes"/>
+        </div>
+        <br>
+        <button id="generateBtn">Generate widget code</button>
+        <br>
+        <br>
+        <button id="pasteWidgetBtn">Test widget</button>
+        <br>
+        <br>
+    </div>
+    <div id="scriptContainer">
+        <!-- <script type="text/javascript" data-config="%7B%22attributes%22%3A%7B%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%2C%22scrolling%22%3A%22yes%22%7D%2C%22source%22%3A%22prt_admon_24_web-296_of-testvidge_st-mu1ev%22%7D" src="https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js"></script> -->
+    </div>
+    
+    <script>
+        try {
+            const {id, dataConfig, src} = JSON.parse(localStorage.getItem('last'));
+            const scriptContainer = document.querySelector('#scriptContainer');
+            injectScript(id, dataConfig, src, scriptContainer);
+        } catch (e) {
+            console.error(e);
+        }
+    </script>
+
+    <script>
+        const generateBtn = document.querySelector('#generateBtn');
+        const pasteWidgetBtn = document.querySelector('#pasteWidgetBtn');
+
+        function fillFields() {
+            try {
+                const last = JSON.parse(localStorage.getItem('last'));
+                const dataConfig = JSON.parse(decodeURIComponent(last.dataConfig));
+                console.log(dataConfig);
+                if (dataConfig.source) {
+                    document.querySelector('[name="source"]').value = dataConfig.source;
+                }
+
+                if (dataConfig.attributes.height) {
+                    document.querySelector('[name="height"]').value = dataConfig.attributes.height
+                }
+                if (dataConfig.attributes.width) {
+                    document.querySelector('[name="width"]').value = dataConfig.attributes.width;
+                }
+
+                if (dataConfig.attributes.scrolling) {
+                    document.querySelector('[name="scrolling"]').value = dataConfig.attributes.scrolling;
+                }
+
+                const checkedTypeId = dataConfig.attributes.isadmon ? 'admon' : 'cpa';
+                document.getElementById(checkedTypeId).checked = true;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        fillFields();
+
+        function generateScript() {
+            const source = document.querySelector('[name="source"]').value;
+            const height = document.querySelector('[name="height"]').value;
+            const width = document.querySelector('[name="width"]').value;
+            const scrolling = document.querySelector('[name="scrolling"]').value;
+            const isadmon = document.getElementById('admon').checked;
+
+            const result = {
+                attributes: {
+                    width, height, scrolling, isadmon: isadmon ? true : undefined
+                },
+                source
+            };
+
+            const uriConfig = encodeURIComponent(JSON.stringify(result));
+            console.log(uriConfig);
+            return {
+                id: "bankiru_main_eosago_widget",
+                dataConfig: uriConfig,
+                src: 'https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js',
+                script: `
+                        <script src="https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js" id="bankiru_main_eosago_widget"
+                        data-config="${uriConfig}"><\/script>`
+            };
+        }
+
+        pasteWidgetBtn.addEventListener('click', () => {
+            const script = generateScript();
+
+            localStorage.setItem('last', JSON.stringify(script))
+            window.location.reload();
+        });
+
+        generateBtn.addEventListener('click', () => {
+            const {script} = generateScript();
+
+            navigator.clipboard.writeText(script).then(
+                () => {
+                    alert('Скопировано в буфер обмена! Используйте Ctrl + V');
+                }
+            );
+        });
+
+    </script>
+</body>
+</html>
