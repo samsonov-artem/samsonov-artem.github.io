@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <script>
         function injectScript(id, dataConfig, src, parent) {
@@ -20,7 +20,7 @@
     <h1>Widget test</h1>
     <div>
         <div class="item">
-            Type:
+            type:
             <input type="radio" id="cpa"
                    name="type" value="cpa">
             <label for="cpa">CPA</label>
@@ -31,19 +31,38 @@
         </div>
         <br>
         <div class="item">
-            source: <input name="source" placeholder="source" value=""/>
+            <label for="source">
+                source:
+            </label>
+            <input id="source" name="source" placeholder="source" value=""/>
         </div>
         <br>
         <div class="item">
-            height: <input name="height" placeholder="height" value="100%"/>
+            <label for="height">
+                height:
+            </label>
+            <input id="height" name="height" placeholder="height" value="100%"/>
         </div>
         <br>
         <div class="item">
-            width: <input name="width" placeholder="width" value="100%"/>
+            <label for="width">
+                width:
+            </label>
+            <input id="width" name="width" placeholder="width" value="100%"/>
         </div>
         <br>
         <div class="item">
-            scrolling: <input name="scrolling" placeholder="scrolling" value="yes"/>
+            <label for="scrolling">
+                scrolling:
+            </label>
+            <input id="scrolling" name="scrolling" placeholder="scrolling" value="yes"/>
+        </div>
+        <br>
+        <div class="item">
+            <label for="host">
+                host:
+            </label>
+            <input id="host" name="host" value="https://www.banki.ru"/>
         </div>
         <br>
         <button id="generateBtn">Generate widget code</button>
@@ -54,7 +73,6 @@
         <br>
     </div>
     <div id="scriptContainer">
-        <!-- <script type="text/javascript" data-config="%7B%22attributes%22%3A%7B%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%2C%22scrolling%22%3A%22yes%22%7D%2C%22source%22%3A%22prt_admon_24_web-296_of-testvidge_st-mu1ev%22%7D" src="https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js"></script> -->
     </div>
     
     <script>
@@ -91,6 +109,10 @@
                     document.querySelector('[name="scrolling"]').value = dataConfig.attributes.scrolling;
                 }
 
+                if (dataConfig.host) {
+                    document.querySelector('[name="host"]').value = dataConfig.host;
+                }
+
                 const checkedTypeId = dataConfig.attributes.isadmon ? 'admon' : 'cpa';
                 document.getElementById(checkedTypeId).checked = true;
             } catch (e) {
@@ -106,12 +128,14 @@
             const width = document.querySelector('[name="width"]').value;
             const scrolling = document.querySelector('[name="scrolling"]').value;
             const isadmon = document.getElementById('admon').checked;
+            const host = document.querySelector('[name="host"]').value;
 
             const result = {
                 attributes: {
                     width, height, scrolling, isadmon: isadmon ? true : undefined
                 },
-                source
+                source,
+                host
             };
 
             const uriConfig = encodeURIComponent(JSON.stringify(result));
@@ -119,7 +143,7 @@
             return {
                 id: "bankiru_main_eosago_widget",
                 dataConfig: uriConfig,
-                src: 'https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js',
+                src: `${host}/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js`,
                 script: `
                         <script src="https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js" id="bankiru_main_eosago_widget"
                         data-config="${uriConfig}"><\/script>`
