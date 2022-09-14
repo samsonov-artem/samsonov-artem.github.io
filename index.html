@@ -138,7 +138,7 @@
                 host
             };
 
-            const uriConfig = encodeURIComponent(JSON.stringify(result));
+            const uriConfig = encodeURIComponent(JSON.stringify({ ...result, host: undefined }));
             console.log(uriConfig);
             return {
                 id: "bankiru_main_eosago_widget",
