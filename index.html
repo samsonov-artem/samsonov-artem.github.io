@@ -144,9 +144,7 @@
                 id: "bankiru_main_eosago_widget",
                 dataConfig: uriConfig,
                 src: `${host}/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js`,
-                script: `
-                        <script src="https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js" id="bankiru_main_eosago_widget"
-                        data-config="${uriConfig}"><\/script>`
+                script: `<script src="https://www.banki.ru/static/bundles/ui-2018/EosagoBundle/eosago/scripts/widget-main-eosago.js" id="bankiru_main_eosago_widget" data-config="${uriConfig}"><\/script>`
             };
         }
 
@@ -162,7 +160,7 @@
 
             navigator.clipboard.writeText(script).then(
                 () => {
-                    alert('Скопировано в буфер обмена! Используйте Ctrl + V');
+                    alert('Copied. Use Ctrl + V');
                 }
             );
         });
