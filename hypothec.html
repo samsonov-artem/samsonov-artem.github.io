@@ -62,7 +62,7 @@
         <label for="host">
             host:
         </label>
-        <input id="host" name="host" value="https://www.banki.ru"/>
+        <input id="host" name="host" value="www.banki.ru"/>
     </div>
     <br>
     <button id="generateBtn">Generate widget code</button>
@@ -109,7 +109,7 @@
                 document.querySelector('[name="scrolling"]').value = dataConfig.attributes.scrolling;
             }
 
-            if (dataConfig.host) {
+            if (dataConfig.attributes.host) {
                 document.querySelector('[name="host"]').value = dataConfig.attributes.host;
             }
 
